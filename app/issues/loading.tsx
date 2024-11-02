@@ -3,12 +3,14 @@ import React from "react";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import IssueAction from "../components/IssueAction";
 
 const LoadingIssuePage = () => {
   const issues = [1, 2, 3, 4, 5, 6, 7];
 
   return (
     <div>
+      <IssueAction />
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
