@@ -1,5 +1,5 @@
 "use client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Text, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
 import { useForm, Controller, Form } from "react-hook-form";
 import "easymde/dist/easymde.min.css";
@@ -8,13 +8,22 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { createIssueSchema } from "@/app/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const [error, setError] = useState<any>("");
   const router = useRouter();
-  const form = useForm<IssueForm>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema),
+  });
 
   return (
     <div className="max-w-xl ">
@@ -24,7 +33,7 @@ const NewIssuePage = () => {
         </Callout.Root>
       )}
       <form
-        onSubmit={form.handleSubmit(async (data) => {
+        onSubmit={handleSubmit(async (data) => {
           try {
             await axios.post("http://localhost:3000/api/issues", data);
             router.push("/issues");
@@ -34,17 +43,18 @@ const NewIssuePage = () => {
         })}
       >
         <div className="max-w-xl space-y-3">
-          <TextField.Root {...form.register("title")} placeholder="Title">
+          <TextField.Root {...register("title")} placeholder="Title">
             <TextField.Slot></TextField.Slot>
           </TextField.Root>
+          <ErrorMessage>{errors.title?.message}</ErrorMessage>
           <Controller
             name="description"
-            control={form.control}
+            control={control}
             render={({ field }) => (
               <SimpleMDE placeholder="Description..." {...field} />
             )}
           />
-
+          <ErrorMessage>{errors.title?.message}</ErrorMessage>
           <Button>Submit</Button>
         </div>
       </form>
