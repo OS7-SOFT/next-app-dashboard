@@ -10,11 +10,13 @@ import { z } from "zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const [error, setError] = useState<any>("");
+  const [isSubmtion, setSubmtion] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -35,9 +37,12 @@ const NewIssuePage = () => {
       <form
         onSubmit={handleSubmit(async (data) => {
           try {
+            console.log("OSmama");
+            setSubmtion(true);
             await axios.post("http://localhost:3000/api/issues", data);
             router.push("/issues");
           } catch (error) {
+            setSubmtion(false);
             setError("An unexepted error occurred.");
           }
         })}
@@ -55,7 +60,9 @@ const NewIssuePage = () => {
             )}
           />
           <ErrorMessage>{errors.title?.message}</ErrorMessage>
-          <Button>Submit</Button>
+          <Button disabled={isSubmtion}>
+            {isSubmtion ? <Spinner /> : "Create Issue"}
+          </Button>
         </div>
       </form>
     </div>
