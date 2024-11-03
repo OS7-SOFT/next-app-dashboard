@@ -5,6 +5,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BiEdit } from "react-icons/bi";
 import ReactMarkdown from "react-markdown";
+import EditButton from "./EditButton";
+import IssueDetail from "./IssueDetail";
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   const issue = await prisma.issue.findUnique({
     where: { id: params.id },
@@ -15,20 +17,10 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   return (
     <Grid columns={{ initial: "1", md: "2" }}>
       <Box className="mb-5">
-        <Heading>{issue.title}</Heading>
-        <Flex gapX="3" my="2">
-          <IssueStatusBadge status={issue.status} />
-          <Text>{issue.createdAt.toDateString()}</Text>
-        </Flex>
-        <Card className="prose" mt="4">
-          <ReactMarkdown>{issue.description}</ReactMarkdown>
-        </Card>
+        <IssueDetail issue={issue} />
       </Box>
       <Box>
-        <Button>
-          <BiEdit />
-          <Link href={`/issues/${params.id}/edit`}>Edit</Link>
-        </Button>
+        <EditButton issueId={issue.id} />
       </Box>
     </Grid>
   );
