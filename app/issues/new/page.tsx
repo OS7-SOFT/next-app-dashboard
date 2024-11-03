@@ -1,7 +1,7 @@
 "use client";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
-import { useForm, Controller, Form } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import "easymde/dist/easymde.min.css";
 import SimpleMDE from "react-simplemde-editor";
 import axios from "axios";
@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/Spinner";
+import { ErrorMessage, Spinner } from "@/app/components";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
