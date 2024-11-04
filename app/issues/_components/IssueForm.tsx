@@ -10,7 +10,6 @@ import { issueSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage, Spinner } from "@/app/components";
 import { Issue } from "@prisma/client";
-import dynamic from "next/dynamic";
 import SimpleMDE from "react-simplemde-editor";
 
 type IssueFormData = z.infer<typeof issueSchema>;
@@ -35,6 +34,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       else await axios.post("/api/issues", data);
 
       router.push("/issues");
+      router.refresh();
     } catch (error) {
       setSubmtion(false);
       setError("An unexepted error occurred.");
@@ -54,9 +54,8 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             defaultValue={issue?.title}
             {...register("title")}
             placeholder="Title"
-          >
-            <TextField.Slot></TextField.Slot>
-          </TextField.Root>
+          />
+
           <ErrorMessage>{errors.title?.message}</ErrorMessage>
           <Controller
             name="description"
@@ -66,7 +65,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
               <SimpleMDE placeholder="Description..." {...field} />
             )}
           />
-          <ErrorMessage>{errors.title?.message}</ErrorMessage>
+          <ErrorMessage>{errors.description?.message}</ErrorMessage>
           <Button disabled={isSubmtion}>
             {issue ? "Update Issue" : "Create Issue"}{" "}
             {isSubmtion && <Spinner />}
@@ -77,4 +76,5 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   );
 };
 
+export const dynamic = "force-dynamic";
 export default IssueForm;
