@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { BiEdit } from "react-icons/bi";
 
-const EditButton = ({ issueId }: { issueId: string }) => {
+const EditIssueButton = ({ issueId }: { issueId: string }) => {
   return (
     <Button>
       <BiEdit />
@@ -12,4 +12,4 @@ const EditButton = ({ issueId }: { issueId: string }) => {
   );
 };
 
-export default EditButton;
+export default EditIssueButton;

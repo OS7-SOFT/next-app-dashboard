@@ -1,12 +1,9 @@
-import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import prisma from "@/prisma/client";
-import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
-import Link from "next/link";
+import { Box, Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-import { BiEdit } from "react-icons/bi";
-import ReactMarkdown from "react-markdown";
 import EditButton from "./EditButton";
 import IssueDetail from "./IssueDetail";
+import DeleteIssueButton from "./DeleteButton";
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   const issue = await prisma.issue.findUnique({
     where: { id: params.id },
@@ -15,12 +12,15 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   if (!issue) return notFound();
 
   return (
-    <Grid columns={{ initial: "1", md: "2" }}>
-      <Box className="mb-5">
+    <Grid columns={{ initial: "1", sm: "5" }} gap={"5"}>
+      <Box className=" md:col-span-4">
         <IssueDetail issue={issue} />
       </Box>
       <Box>
-        <EditButton issueId={issue.id} />
+        <Flex direction={"column"} gap={"4"}>
+          <EditButton issueId={issue.id} />
+          <DeleteIssueButton issueId={issue.id} />
+        </Flex>
       </Box>
     </Grid>
   );
