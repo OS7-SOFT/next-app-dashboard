@@ -17,7 +17,7 @@ export async function PUT(
   if (!issue)
     return NextResponse.json(
       { error: "This issue not founded" },
-      { status: 400 }
+      { status: 404 }
     );
 
   const issueUpdated = await prisma.issue.update({
@@ -29,4 +29,23 @@ export async function PUT(
   });
 
   return NextResponse.json(issueUpdated, { status: 200 });
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const issue = await prisma.issue.findUnique({ where: { id: params.id } });
+
+  if (!issue)
+    return NextResponse.json(
+      { error: "This issue not founded" },
+      { status: 404 }
+    );
+
+  await prisma.issue.delete({
+    where: { id: params.id },
+  });
+
+  return NextResponse.json({});
 }
