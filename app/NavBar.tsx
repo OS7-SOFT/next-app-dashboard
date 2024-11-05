@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { IoBug } from "react-icons/io5";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "@/app/components";
 
 const NavBar = () => {
   return (
@@ -62,7 +63,7 @@ const NavLinks = () => {
 const AuthStatus = () => {
   const { status, data } = useSession();
 
-  if (status === "loading") return null;
+  if (status === "loading") return <Skeleton width={"3rem"} />;
 
   if (status === "unauthenticated")
     return (
